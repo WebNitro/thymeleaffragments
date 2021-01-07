@@ -20,9 +20,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder authenticationMgr) throws Exception{
 		authenticationMgr.inMemoryAuthentication()
-		.withUser("devuser").password("{noop}dev").authorities("ROLE_USER")
+	//	.withUser("devuser").password("{noop}dev").authorities("ROLE_USER")
+		.withUser("devuser").password("dev").authorities("ROLE_USER")
+
 		.and()
-		.withUser("adminuser").password("{noop}admin").authorities("ROLE_USER","ROLE_ADMIN");
+//		.withUser("adminuser").password("{noop}admin").authorities("ROLE_USER","ROLE_ADMIN");
+		.withUser("adminuser").password("admin").authorities("ROLE_USER","ROLE_ADMIN");
+
 		
 //		authenticationMgr.jdbcAuthentication().dataSource(datasource).passwordEncoder(new BCryptPasswordEncoder())
 //		                 .usersByUsernameQuery("select username,passwd,enabled from users where username =?")
@@ -35,10 +39,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception{
 		http
 		.authorizeRequests()
-		.antMatchers("/inventory/edit/*").hasRole("USER")
-		.antMatchers("/inventory/add*").hasRole("ADMIN")
-		.antMatchers("/inventory/delete/*").hasRole("ADMIN")
-		.antMatchers("/actuator/health").hasRole("ADMIN")
+//		.antMatchers("/inventory/edit/*").hasRole("USER")
+//		.antMatchers("/inventory/add*").hasRole("ADMIN")
+//		.antMatchers("/inventory/delete/*").hasRole("ADMIN")
+//		.antMatchers("/actuator/health").hasRole("ADMIN")
+		
+		.antMatchers("/inventory/edit/*").permitAll()
+		.antMatchers("/inventory/add*").permitAll()
+		.antMatchers("/inventory/delete/*").permitAll()
+		.antMatchers("/actuator/health").permitAll()
 		.antMatchers("/inventory/all","/inventory*").permitAll()
 		.and()
 		.httpBasic();
